@@ -1,94 +1,13 @@
 const puppeteer = require("puppeteer-extra");
 const Stealth = require("puppeteer-extra-plugin-stealth");
 
-module.exports = async (what, city, state, numJobs) => {
+module.exports = async (tools, what, city, state, numJobs) => {
   puppeteer.use(Stealth());
 
   return await puppeteer.launch({ headless: false }).then(async (browser) => {
     const page = (await browser.pages())[0];
 
     // store in json file
-    const types = {
-      frontend: "frontend",
-      backend: "backend",
-      both: "frontend/backend",
-      other: "other",
-    };
-
-    const tools = {
-      JavaScript: {
-        count: 0,
-        type: types.both,
-      },
-      TypeScript: {
-        count: 0,
-        type: types.both,
-      },
-      React: {
-        count: 0,
-        type: types.frontend,
-      },
-      Vue: {
-        count: 0,
-        type: types.frontend,
-      },
-      Angular: {
-        count: 0,
-        type: types.frontend,
-      },
-      Node: {
-        count: 0,
-        type: types.backend,
-      },
-      "express.js": {
-        count: 0,
-        type: types.backend,
-      },
-      SQL: {
-        count: 0,
-        type: types.backend,
-      },
-      NOSQL: {
-        count: 0,
-        type: types.backend,
-      },
-      mongodb: {
-        count: 0,
-        type: types.backend,
-      },
-      Java: {
-        count: 0,
-        type: types.backend,
-      },
-      "C#": {
-        count: 0,
-        type: types.backend,
-      },
-      "C++": {
-        count: 0,
-        type: types.backend,
-      },
-      Python: {
-        count: 0,
-        type: types.backend,
-      },
-      PHP: {
-        count: 0,
-        type: types.backend,
-      },
-      Ruby: {
-        count: 0,
-        type: types.backend,
-      },
-      Golang: {
-        count: 0,
-        type: types.backend,
-      },
-      Git: {
-        count: 0,
-        type: types.other,
-      },
-    };
 
     const getJobIds = async (what, city, state, numJobs) => {
       let baseurl = `https://www.indeed.com/jobs?q=${what}&l=${city}%2C+${state}&radius=50&sc=0kf%3Aexplvl%28ENTRY_LEVEL%29%3B`;
@@ -163,7 +82,7 @@ module.exports = async (what, city, state, numJobs) => {
         for (const tool in tools) {
           if (tool != "C++") {
             const regex = new RegExp(tool, "i");
-            regex.test(desc) ? tools[tool].count++ : undefined;
+            regex.test(desc) ? tools[tool]++ : undefined;
           }
         }
       }

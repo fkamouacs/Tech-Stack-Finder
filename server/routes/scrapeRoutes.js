@@ -4,9 +4,15 @@ const express = require("express");
 const router = express();
 
 router.post("/scrape", async (req, res) => {
-  const data = await scrape("software+developer", "East+Setauket", "NY", 1);
-  console.log(data);
-  res.send(data);
+  const toolCountData = await scrape(
+    req.body.tools,
+    req.body.what,
+    req.body.city,
+    req.body.state,
+    req.body.numJobs
+  );
+
+  res.send(toolCountData);
 });
 
 module.exports = router;
