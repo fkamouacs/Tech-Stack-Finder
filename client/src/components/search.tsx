@@ -36,10 +36,9 @@ const search = () => {
     );
     if (toggledTools.all) {
       // adding all tools
-      if (toggledTools.frontend) {
-        let updatedValue = { frontend: false };
-        setToggledTools({ ...toggledTools, ...updatedValue });
-      }
+      let updatedValue = { frontend: false, tools: false, backend: false };
+      setToggledTools({ ...toggledTools, ...updatedValue });
+
       setCurrTools({
         ...currTools,
         frontend: { ...tools.frontend },
@@ -48,21 +47,24 @@ const search = () => {
       });
     } else {
       // removing all tools
-      if (toggledTools.frontend && toggledTools.all) {
-        let updatedValue = { frontend: false };
-        setToggledTools({ ...toggledTools, ...updatedValue });
-      } else if (toggledTools.frontend && !toggledTools.all) {
-        let updatedValue = { frontend: true };
-        setToggledTools({ ...toggledTools, ...updatedValue });
+      if (toggledTools.frontend) {
+        const { ["backend"]: back, ["tools"]: tools, ...rest } = currTools;
+        setCurrTools(rest);
+      } else if (toggledTools.backend) {
+        const { ["frontend"]: front, ["tools"]: tools, ...rest } = currTools;
+        setCurrTools(rest);
+      } else if (toggledTools.tools) {
+        const { ["frontend"]: front, ["backend"]: back, ...rest } = currTools;
+        setCurrTools(rest);
+      } else {
+        const {
+          ["frontend"]: front,
+          ["backend"]: back,
+          ["tools"]: tools,
+          ...rest
+        } = currTools;
+        setCurrTools(rest);
       }
-
-      const {
-        ["frontend"]: front,
-        ["backend"]: back,
-        ["tools"]: tools,
-        ...rest
-      } = currTools;
-      setCurrTools(rest);
     }
   }, [toggledTools.all]);
 
@@ -74,8 +76,7 @@ const search = () => {
     );
     if (toggledTools.frontend || toggledTools.all) {
       // adding frontend tools
-
-      if (toggledTools.all) {
+      if (toggledTools.all && toggledTools.frontend) {
         let updatedValue = { all: false };
         setToggledTools({ ...toggledTools, ...updatedValue });
       }
@@ -94,8 +95,12 @@ const search = () => {
         : "border-off-black border rounded-xl  py-1 px-2 text-xs hover:bg-off-black hover:text-off-white cursor-pointer"
     );
 
-    if (toggledTools.backend) {
+    if (toggledTools.backend || toggledTools.all) {
       // adding frontend tools
+      if (toggledTools.all && toggledTools.backend) {
+        let updatedValue = { all: false };
+        setToggledTools({ ...toggledTools, ...updatedValue });
+      }
       setCurrTools({ ...currTools, backend: { ...tools.backend } });
     } else {
       // removing frontend tools
@@ -111,8 +116,12 @@ const search = () => {
         : "border-off-black border rounded-xl  py-1 px-2 text-xs hover:bg-off-black hover:text-off-white cursor-pointer"
     );
 
-    if (toggledTools.tools) {
+    if (toggledTools.tools || toggledTools.all) {
       // adding frontend tools
+      if (toggledTools.all && toggledTools.tools) {
+        let updatedValue = { all: false };
+        setToggledTools({ ...toggledTools, ...updatedValue });
+      }
       setCurrTools({ ...currTools, tools: { ...tools.tools } });
     } else {
       // removing frontend tools
