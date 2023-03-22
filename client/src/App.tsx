@@ -21,37 +21,12 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="App text-off-black max-w-3xl w-full ">
+      <div className="App text-off-black max-w-3xl w-full flex flex-col justify-center h-full">
+        <div className="px-4 font-bold text-3xl">Tech Stack Finder</div>
         <Search />
       </div>
     </>
   );
 }
-
-const tools = {
-  frontend: {
-    JavaScript: 0,
-    TypeScript: 0,
-    React: 0,
-    Vue: 0,
-    Angular: 0,
-  },
-  backend: {
-    Node: 0,
-    "express.js": 0,
-    SQL: 0,
-    mongodb: 0,
-    "C#": 0,
-    "C++": 0,
-    Java: 0,
-    Python: 0,
-    PHP: 0,
-    Ruby: 0,
-    Golang: 0,
-  },
-  tools: {
-    Git: 0,
-  },
-};
 
 export default App;
