@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import { Tooltip } from "react-tooltip";
 import searchSVG from "../assets/search.svg";
 import mapSVG from "../assets/map-pin.svg";
 
@@ -43,8 +44,8 @@ const search = () => {
   useEffect(() => {
     setToggledAll(
       toggledTools.all
-        ? "border-off-black border rounded-xl  py-1 px-2 text-xs bg-off-black text-off-white cursor-pointer"
-        : "border-off-black border rounded-xl  py-1 px-2 text-xs hover:bg-off-black hover:text-off-white cursor-pointer"
+        ? "border-off-black border rounded-xl  py-1 px-2 text-xs bg-off-black text-off-white cursor-pointer "
+        : "border-off-black border rounded-xl  py-1 px-2 text-xs hover:bg-off-black hover:text-off-white cursor-pointer "
     );
     if (toggledTools.all) {
       // adding all tools
@@ -224,19 +225,47 @@ const search = () => {
 
       <div className="flex flex-wrap space-x-2 space-y-2 mt-2 overflow-hidden">
         <div className="w-0"></div>
-        <div className={toggledAll} onClick={handleAllClick}>
-          All
+        <div
+          className={toggledAll}
+          onClick={handleAllClick}
+          data-tooltip-id="all"
+          data-tooltip-html="Frontend <br/> Backend <br/> Tools"
+          data-tooltip-place="bottom"
+        >
+          All <Tooltip id="all" />
         </div>
 
-        <div className={toggledFrontend} onClick={handleFrontendClick}>
-          Frontend
+        <div
+          className={toggledFrontend}
+          onClick={handleFrontendClick}
+          data-tooltip-id="frontend"
+          data-tooltip-html="JavaScript <br/> TypeScript <br/> React 
+          <br/> Vue <br/> Angular <br/> Redux"
+          data-tooltip-place="bottom"
+        >
+          Frontend <Tooltip id="frontend" />
         </div>
 
-        <div className={toggledBackend} onClick={handleBackendClick}>
-          Backend
+        <div
+          className={toggledBackend}
+          onClick={handleBackendClick}
+          data-tooltip-id="backend"
+          data-tooltip-html="Node.js&nbsp; &nbsp; Express.js<br/> SQL 
+           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;MongoDB <br/> C# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;C++ 
+           <br/> Java &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Python 
+           <br/> PHP &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Ruby <br/> Golang"
+          data-tooltip-place="bottom"
+        >
+          Backend <Tooltip id="backend" />
         </div>
-        <div className={toggledTool} onClick={handleToolClick}>
-          Tools
+        <div
+          className={toggledTool}
+          onClick={handleToolClick}
+          data-tooltip-id="tool"
+          data-tooltip-html="Git <br/> Docker"
+          data-tooltip-place="bottom"
+        >
+          Tools <Tooltip id="tool" />
         </div>
 
         {displayAddedTools()}
@@ -258,7 +287,7 @@ const search = () => {
       </div>
 
       <button
-        className="w-full my-4 bg-off-black text-off-white font-bold py-2 rounded-sm border border-off-black hover:bg-off-white hover:text-off-black"
+        className="w-full my-4  text-off-black font-bold py-2 rounded-sm border border-off-black hover:bg-off-black hover:text-off-white"
         onClick={handleSubmit}
       >
         Search
@@ -293,6 +322,7 @@ const tools = {
   },
   tools: {
     Git: 0,
+    Docker: 0,
   },
   other: {},
 };
