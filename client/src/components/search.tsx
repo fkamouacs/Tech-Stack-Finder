@@ -1,6 +1,16 @@
-import { SyntheticEvent, useState, MouseEvent, useEffect } from "react";
+import {
+  SyntheticEvent,
+  useState,
+  MouseEvent,
+  useEffect,
+  KeyboardEvent,
+  HtmlHTMLAttributes,
+  ChangeEvent,
+} from "react";
 
 import { OpenStreetMapProvider } from "leaflet-geosearch";
+import searchSVG from "../assets/search.svg";
+import mapSVG from "../assets/map-pin.svg";
 
 const search = () => {
   interface ToolType {
@@ -23,6 +33,8 @@ const search = () => {
     backend: false,
     tools: false,
   });
+  const [addTool, setAddTool] = useState(false);
+  const [newTool, setNewTool] = useState<Object[]>([]);
 
   useEffect(() => {
     console.log(currTools);
@@ -130,6 +142,10 @@ const search = () => {
     }
   }, [toggledTools.tools]);
 
+  useEffect(() => {
+    setCurrTools({ ...currTools, other: { ...newTool } });
+  }, [newTool]);
+
   const handleAllClick = () => {
     let updatedValue = { all: !toggledTools.all };
     setToggledTools({ ...toggledTools, ...updatedValue });
@@ -150,7 +166,16 @@ const search = () => {
     setToggledTools({ ...toggledTools, ...updatedValue });
   };
 
-  const handleAddClick = (e: MouseEvent<HTMLDivElement>) => {};
+  const handleAddClick = (e: MouseEvent<HTMLDivElement>) => {
+    setAddTool(true);
+  };
+
+  const handleAddTool = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      setNewTool([...newTool, { [e.currentTarget.value]: 0 }]);
+      setAddTool(false);
+    }
+  };
 
   const handleSubmit = () => {
     console.log("submit");
@@ -158,22 +183,43 @@ const search = () => {
     console.log(where);
   };
 
+  const removeNewTool = (tool: Object) => {
+    let arr = newTool.filter((e) => Object.keys(e)[0] != Object.keys(tool)[0]);
+    console.log(arr);
+    setNewTool(arr);
+  };
+
+  const displayAddedTools = () => {
+    return newTool.map((tool) => {
+      return (
+        <div
+          className="border-off-black border rounded-xl  py-1 px-2 text-xs bg-off-black text-off-white cursor-pointer"
+          onClick={() => removeNewTool(tool)}
+        >
+          {Object.keys(tool)[0]}
+        </div>
+      );
+    });
+  };
+
   return (
     <div className="m-4 ">
       <div className="w-full flex items-center border rounded-sm">
         <div className="mx-4 font-bold">What</div>
         <input
-          className="block py-2 pr-2 outline-none w-full"
+          className="block py-2 outline-none w-full"
           onChange={(e) => setWhat(e.target.value)}
         />
+        <img className="mx-4 w-4" src={searchSVG} />
       </div>
 
       <div className="w-full flex items-center border rounded-sm mt-4">
         <div className="mx-4 font-bold">Where</div>
         <input
-          className="block py-2 pr-2 outline-none w-full"
+          className="block py-2 outline-none w-full"
           onChange={(e) => setWhere(e.target.value)}
         />
+        <img className="mx-4 w-4" src={mapSVG} />
       </div>
 
       <div className="flex space-x-2 mt-4">
@@ -191,12 +237,23 @@ const search = () => {
         <div className={toggledTool} onClick={handleToolClick}>
           Tools
         </div>
-        <div
-          className="border-off-black border  rounded-xl  py-1 px-3 text-xs hover:bg-off-black hover:text-off-white cursor-pointer"
-          onClick={handleAddClick}
-        >
-          +
-        </div>
+
+        {addTool ? (
+          <input
+            className="outline-none border"
+            onKeyUp={handleAddTool}
+            autoFocus
+          />
+        ) : (
+          <div
+            className="border-off-black border rounded-xl  py-1 px-3 text-xs hover:bg-off-black hover:text-off-white cursor-pointer"
+            onClick={handleAddClick}
+          >
+            +
+          </div>
+        )}
+
+        {displayAddedTools()}
       </div>
 
       <button

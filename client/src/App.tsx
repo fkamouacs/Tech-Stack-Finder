@@ -22,7 +22,7 @@ function App() {
     <>
       <Navbar />
       <div className="App text-off-black max-w-3xl w-full flex flex-col justify-center h-full">
-        <div className="px-4 font-bold text-3xl">Tech Stack Finder</div>
+        <div className="px-4 font-bold text-3xl">Tech Stack Finder 💻</div>
         <Search />
       </div>
     </>
