@@ -222,7 +222,8 @@ const search = () => {
         <img className="mx-4 w-4" src={mapSVG} />
       </div>
 
-      <div className="flex space-x-2 mt-4">
+      <div className="flex flex-wrap space-x-2 space-y-2 mt-2 overflow-hidden">
+        <div className="w-0"></div>
         <div className={toggledAll} onClick={handleAllClick}>
           All
         </div>
@@ -238,11 +239,13 @@ const search = () => {
           Tools
         </div>
 
+        {displayAddedTools()}
         {addTool ? (
           <input
-            className="outline-none border"
+            className="outline-none border text-sm px-2 rounded-lg "
             onKeyUp={handleAddTool}
             autoFocus
+            onBlur={() => setAddTool(false)}
           />
         ) : (
           <div
@@ -252,8 +255,6 @@ const search = () => {
             +
           </div>
         )}
-
-        {displayAddedTools()}
       </div>
 
       <button
