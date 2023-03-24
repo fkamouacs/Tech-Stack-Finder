@@ -19,7 +19,7 @@ const search = () => {
     frontend?: object;
     backend?: object;
     tools?: object;
-    other?: object;
+    other: Object;
   }
   const [toggledAll, setToggledAll] = useState("");
   const [toggledFrontend, setToggledFrontend] = useState("");
@@ -144,7 +144,16 @@ const search = () => {
   }, [toggledTools.tools]);
 
   useEffect(() => {
-    setCurrTools({ ...currTools, other: { ...newTool } });
+    const other: any = {};
+
+    for (const [key, value] of Object.entries(newTool)) {
+      let name = Object.keys(value)[0];
+      other[name] = 0;
+    }
+
+    setCurrTools({ ...currTools, other: { ...other } });
+
+    //setCurrTools({ ...currTools, other: { ...newTool } });
   }, [newTool]);
 
   const handleAllClick = () => {
@@ -167,7 +176,7 @@ const search = () => {
     setToggledTools({ ...toggledTools, ...updatedValue });
   };
 
-  const handleAddClick = (e: MouseEvent<HTMLDivElement>) => {
+  const handleAddClick = () => {
     setAddTool(true);
   };
 
@@ -186,7 +195,7 @@ const search = () => {
 
   const removeNewTool = (tool: Object) => {
     let arr = newTool.filter((e) => Object.keys(e)[0] != Object.keys(tool)[0]);
-    console.log(arr);
+
     setNewTool(arr);
   };
 
