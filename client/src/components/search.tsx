@@ -10,7 +10,9 @@ import { Tooltip } from "react-tooltip";
 import searchSVG from "../assets/search.svg";
 import mapSVG from "../assets/map-pin.svg";
 
-const search = (props: { setData: Dispatch<SetStateAction<Object>> }) => {
+const search = (props: {
+  setData: Dispatch<SetStateAction<Array<Object>>>;
+}) => {
   interface ToolType {
     all?: object;
     frontend?: object;
@@ -225,9 +227,14 @@ const search = (props: { setData: Dispatch<SetStateAction<Object>> }) => {
       state: state,
       numJobs: numJobs,
     };
+    let arrayRes: any = [];
     await axios.post("http://localhost:3000/scrape", payload).then((res) => {
-      props.setData(res);
+      for (const [key, value] of Object.entries(res.data)) {
+        let curr = { x: key, y: value };
+        arrayRes.push(curr);
+      }
     });
+    props.setData(arrayRes);
   };
 
   return (
