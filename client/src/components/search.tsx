@@ -227,14 +227,18 @@ const search = (props: {
       state: state,
       numJobs: numJobs,
     };
-    let arrayRes: any = [];
+    let arrayRes: Object[] = [];
     await axios.post("http://localhost:3000/scrape", payload).then((res) => {
       for (const [key, value] of Object.entries(res.data)) {
         let curr = { x: key, y: value };
         arrayRes.push(curr);
       }
     });
-    props.setData(arrayRes);
+
+    let sortedRes: Object[] = arrayRes.sort((a: any, b: any) => {
+      return a.y - b.y;
+    });
+    props.setData(sortedRes.reverse());
   };
 
   return (

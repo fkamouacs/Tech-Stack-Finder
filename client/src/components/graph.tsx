@@ -1,18 +1,31 @@
 import React from "react";
 import {
   Chart,
+  Colors,
   CategoryScale,
   LinearScale,
   BarElement,
   Title,
   Tooltip,
   Legend,
+  ChartData,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import type { ChartOptions } from "chart.js";
 
-Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+Chart.register(
+  Colors,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-export const options = {
+Chart.defaults.font.family = "Nunito";
+
+const options: ChartOptions<"bar"> = {
   responsive: true,
   plugins: {
     legend: {
@@ -23,16 +36,22 @@ export const options = {
       text: "Chart.js Bar Chart",
     },
   },
+  scales: {
+    y: {
+      ticks: {
+        stepSize: 1,
+      },
+    },
+  },
 };
 
 const graph = (props: { data: { x?: String; y?: Number }[] }) => {
-  const data = { datasets: [{ data: props.data }] };
+  const data: ChartData<"bar"> = { datasets: [{ data: props.data }] };
 
   console.log(data);
-  const renderLineChart = <Bar options={options} data={data} />;
 
   return (
-    <div>
+    <div className="flex justify-center">
       <Bar options={options} data={data} />
     </div>
   );
