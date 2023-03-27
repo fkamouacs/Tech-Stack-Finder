@@ -1,25 +1,22 @@
 import {
-  SyntheticEvent,
   useState,
-  MouseEvent,
   useEffect,
   KeyboardEvent,
-  HtmlHTMLAttributes,
-  ChangeEvent,
+  Dispatch,
+  SetStateAction,
 } from "react";
-
-import { OpenStreetMapProvider } from "leaflet-geosearch";
+import axios from "axios";
 import { Tooltip } from "react-tooltip";
 import searchSVG from "../assets/search.svg";
 import mapSVG from "../assets/map-pin.svg";
 
-const search = () => {
+const search = (props: { setData: Dispatch<SetStateAction<Object>> }) => {
   interface ToolType {
     all?: object;
     frontend?: object;
     backend?: object;
     tools?: object;
-    other: Object;
+    other: object;
   }
   const [toggledAll, setToggledAll] = useState("");
   const [toggledFrontend, setToggledFrontend] = useState("");
@@ -36,10 +33,6 @@ const search = () => {
   });
   const [addTool, setAddTool] = useState(false);
   const [newTool, setNewTool] = useState<Object[]>([]);
-
-  useEffect(() => {
-    console.log(currTools);
-  });
 
   useEffect(() => {
     setToggledAll(
@@ -152,8 +145,6 @@ const search = () => {
     }
 
     setCurrTools({ ...currTools, other: { ...other } });
-
-    //setCurrTools({ ...currTools, other: { ...newTool } });
   }, [newTool]);
 
   const handleAllClick = () => {
@@ -188,9 +179,17 @@ const search = () => {
   };
 
   const handleSubmit = () => {
-    console.log("submit");
-    console.log(what);
-    console.log(where);
+    let job = what.replace(" ", "+");
+    let [city, state] = where.replace(" ", "+").split(",");
+
+    let allTools = {
+      ...currTools.frontend,
+      ...currTools.backend,
+      ...currTools.tools,
+      ...currTools.other,
+    };
+
+    scrape(allTools, job, city, state, 2);
   };
 
   const removeNewTool = (tool: Object) => {
@@ -212,6 +211,25 @@ const search = () => {
     });
   };
 
+  const scrape = async (
+    tools: Object,
+    what: string,
+    city: string,
+    state: string,
+    numJobs: number
+  ) => {
+    const payload = {
+      tools: tools,
+      what: what,
+      city: city,
+      state: state,
+      numJobs: numJobs,
+    };
+    await axios.post("http://localhost:3000/scrape", payload).then((res) => {
+      props.setData(res);
+    });
+  };
+
   return (
     <div className="m-4 ">
       <div className="w-full flex items-center border rounded-sm">
@@ -219,6 +237,7 @@ const search = () => {
         <input
           className="block py-2 outline-none w-full"
           onChange={(e) => setWhat(e.target.value)}
+          placeholder="Job title, keywords, or company"
         />
         <img className="mx-4 w-4" src={searchSVG} />
       </div>
@@ -228,6 +247,7 @@ const search = () => {
         <input
           className="block py-2 outline-none w-full"
           onChange={(e) => setWhere(e.target.value)}
+          placeholder="City, state"
         />
         <img className="mx-4 w-4" src={mapSVG} />
       </div>

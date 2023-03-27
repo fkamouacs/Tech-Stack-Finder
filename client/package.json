@@ -11,13 +11,13 @@
   "dependencies": {
     "@types/puppeteer": "^7.0.4",
     "axios": "^1.3.4",
-    "leaflet-geosearch": "^3.7.0",
     "puppeteer": "^19.7.5",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-tooltip": "^5.10.1"
+    "react-tooltip": "^5.10.1",
+    "recharts": "^2.5.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

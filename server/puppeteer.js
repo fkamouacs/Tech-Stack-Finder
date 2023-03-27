@@ -78,8 +78,8 @@ module.exports = async (tools, what, city, state, numJobs) => {
     };
 
     const getTools = async (descs) => {
-      for (const desc in descs) {
-        for (const tool of tools) {
+      for (const desc of descs) {
+        for (const tool in tools) {
           if (tool != "C++") {
             const regex = new RegExp(tool, "i");
             regex.test(desc) ? tools[tool]++ : undefined;

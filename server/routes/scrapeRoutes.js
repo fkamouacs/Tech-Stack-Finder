@@ -11,7 +11,6 @@ router.post("/scrape", async (req, res) => {
     req.body.state,
     req.body.numJobs
   );
-
   res.send(toolCountData);
 });
 
