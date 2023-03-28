@@ -1,7 +1,7 @@
 # Teach Stack Finder
 
-Typescript
-React
-Tailwindcss
-Node.js
-Express.js
+* Typescript
+* React
+* Tailwindcss
+* Node.js
+* Express.js
