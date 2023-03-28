@@ -9,6 +9,7 @@ module.exports = {
     colors: {
       "off-white": "#f5f5f5",
       "off-black": "#343231 ",
+      error: "#ff3333",
     },
   },
   plugins: [],

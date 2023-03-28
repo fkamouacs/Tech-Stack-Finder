@@ -36,11 +36,7 @@ const search = (props: {
   });
   const [addTool, setAddTool] = useState(false);
   const [newTool, setNewTool] = useState<Object[]>([]);
-  const [error, setError] = useState({});
-
-  useEffect(() => {
-    console.log(error);
-  }, [error]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setToggledAll(
@@ -197,8 +193,13 @@ const search = (props: {
       ...currTools.other,
     };
 
-    await scrape(allTools, job, city, state, 2);
-    props.setQuery({ city: city, state: state });
+    // check if tools is empty
+    if (Object.keys(allTools).length) {
+      await scrape(allTools, job, city, state, 20);
+      props.setQuery({ city: city, state: state });
+    } else {
+      setError("No tools selected. Please select some tools and try again.");
+    }
   };
 
   const removeNewTool = (tool: Object) => {
@@ -247,7 +248,9 @@ const search = (props: {
         props.setData(sortedRes.reverse());
       } else {
         // error
-        setError({ query: true });
+        setError(
+          " Invalid query. Please enter a valid search term and try again."
+        );
       }
     });
   };
@@ -263,7 +266,6 @@ const search = (props: {
         />
         <img className="mx-4 w-4" src={searchSVG} />
       </div>
-
       <div className="w-full flex items-center border rounded-sm mt-4">
         <div className="mx-4 font-bold">Where</div>
         <input
@@ -273,7 +275,6 @@ const search = (props: {
         />
         <img className="mx-4 w-4" src={mapSVG} />
       </div>
-
       <div className="flex flex-wrap space-x-2 space-y-2 mt-2 overflow-hidden">
         <div className="w-0"></div>
         <div
@@ -336,7 +337,13 @@ const search = (props: {
           </div>
         )}
       </div>
-
+      {error != "" ? (
+        <div className="mt-2 text-error mx-2">{error}</div>
+      ) : (
+        <div className="mt-2">
+          <br></br>
+        </div>
+      )}
       <button
         className="w-full my-4  text-off-black font-bold py-2 rounded-sm border border-off-black hover:bg-off-black hover:text-off-white"
         onClick={handleSubmit}
