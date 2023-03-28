@@ -25,30 +25,44 @@ Chart.register(
 
 Chart.defaults.font.family = "Nunito";
 
-const options: ChartOptions<"bar"> = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart",
-    },
-  },
-  scales: {
-    y: {
-      ticks: {
-        stepSize: 1,
+const graph = (props: {
+  data: { x?: String; y?: Number }[];
+  query: { city: String; state: String };
+}) => {
+  const data: ChartData<"bar"> = {
+    datasets: [{ label: "count", data: props.data }],
+  };
+
+  let isError = false;
+
+  // set error if no data
+  if (data.datasets[0].data.length == 0) {
+    isError = true;
+  }
+  const chartTitle = isError ? "" : `${props.query.city}, ${props.query.state}`;
+
+  const options: ChartOptions<"bar"> = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+      },
+      title: {
+        display: true,
+        text: chartTitle,
       },
     },
-  },
-};
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+  };
 
-const graph = (props: { data: { x?: String; y?: Number }[] }) => {
-  const data: ChartData<"bar"> = { datasets: [{ data: props.data }] };
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mt-4 mx-4">
       <Bar options={options} data={data} />
     </div>
   );

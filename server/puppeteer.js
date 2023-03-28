@@ -13,6 +13,12 @@ module.exports = async (tools, what, city, state, numJobs) => {
       let baseurl = `https://www.indeed.com/jobs?q=${what}&l=${city}%2C+${state}&radius=50`;
       await page.goto(baseurl);
 
+      // check if search query is valid
+      let jobCheck = (await page.$(".cardOutline")) || undefined;
+      if (!jobCheck) {
+        return null;
+      }
+
       const jobCount = await getJobCount();
       if (numJobs > jobCount) numJobs = jobCount;
       let jobIds = [];
@@ -93,13 +99,19 @@ module.exports = async (tools, what, city, state, numJobs) => {
     const getJobTitles = () => {};
 
     return await getJobIds(what, city, state, numJobs).then(async (res) => {
-      let [jobids, url] = res;
-      return await getJobDesc(jobids, url).then(async (res) => {
-        return await getTools(res).then(async (res) => {
-          await browser.close();
-          return { data: res, jobIds: jobids };
+      if (res) {
+        let [jobids, url] = res;
+        return await getJobDesc(jobids, url).then(async (res) => {
+          return await getTools(res).then(async (res) => {
+            await browser.close();
+            return { data: res, jobIds: jobids };
+          });
         });
-      });
+      } else {
+        // search query invalid
+        await browser.close();
+        return { error: "invalid search query" };
+      }
     });
   });
 };

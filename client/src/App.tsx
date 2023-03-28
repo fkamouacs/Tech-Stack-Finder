@@ -11,16 +11,21 @@ function App() {
     y?: Number;
   }
 
-  const [data, setData] = useState<ToolData[]>([]);
+  interface Query {
+    city: String;
+    state: String;
+  }
 
+  const [data, setData] = useState<ToolData[]>([]);
+  const [query, setQuery] = useState<Query>({ city: "", state: "" });
   return (
     <>
       <Navbar />
       <div className="App text-off-black max-w-3xl w-full flex flex-col justify-center h-full ">
         <div className="px-4 font-bold text-3xl">Tech Stack Finder 💻</div>
-        <Search setData={setData} />
+        <Search setData={setData} setQuery={setQuery} />
 
-        <Graph data={data} />
+        <Graph data={data} query={query} />
       </div>
     </>
   );

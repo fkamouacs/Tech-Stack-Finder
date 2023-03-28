@@ -12,6 +12,7 @@ import mapSVG from "../assets/map-pin.svg";
 
 const search = (props: {
   setData: Dispatch<SetStateAction<Array<Object>>>;
+  setQuery: Dispatch<SetStateAction<{ city: String; state: String }>>;
 }) => {
   interface ToolType {
     all?: object;
@@ -35,6 +36,11 @@ const search = (props: {
   });
   const [addTool, setAddTool] = useState(false);
   const [newTool, setNewTool] = useState<Object[]>([]);
+  const [error, setError] = useState({});
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
 
   useEffect(() => {
     setToggledAll(
@@ -180,7 +186,7 @@ const search = (props: {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     let job = what.replace(" ", "+");
     let [city, state] = where.replace(" ", "+").split(",");
 
@@ -191,7 +197,8 @@ const search = (props: {
       ...currTools.other,
     };
 
-    scrape(allTools, job, city, state, 30);
+    await scrape(allTools, job, city, state, 2);
+    props.setQuery({ city: city, state: state });
   };
 
   const removeNewTool = (tool: Object) => {
@@ -229,17 +236,20 @@ const search = (props: {
     };
     let arrayRes: Object[] = [];
     await axios.post("http://localhost:3000/scrape", payload).then((res) => {
-      for (const [key, value] of Object.entries(res.data.data)) {
-        let curr = { x: key, y: value };
-        arrayRes.push(curr);
+      if (res.data.data) {
+        for (const [key, value] of Object.entries(res.data.data)) {
+          let curr = { x: key, y: value };
+          arrayRes.push(curr);
+        }
+        let sortedRes: Object[] = arrayRes.sort((a: any, b: any) => {
+          return a.y - b.y;
+        });
+        props.setData(sortedRes.reverse());
+      } else {
+        // error
+        setError({ query: true });
       }
-      console.log(res);
     });
-
-    let sortedRes: Object[] = arrayRes.sort((a: any, b: any) => {
-      return a.y - b.y;
-    });
-    props.setData(sortedRes.reverse());
   };
 
   return (
