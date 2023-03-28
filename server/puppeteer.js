@@ -10,7 +10,7 @@ module.exports = async (tools, what, city, state, numJobs) => {
     // store in json file
 
     const getJobIds = async (what, city, state, numJobs) => {
-      let baseurl = `https://www.indeed.com/jobs?q=${what}&l=${city}%2C+${state}&radius=50&sc=0kf%3Aexplvl%28ENTRY_LEVEL%29%3B`;
+      let baseurl = `https://www.indeed.com/jobs?q=${what}&l=${city}%2C+${state}&radius=50`;
       await page.goto(baseurl);
 
       const jobCount = await getJobCount();
@@ -81,7 +81,7 @@ module.exports = async (tools, what, city, state, numJobs) => {
       for (const desc of descs) {
         for (const tool in tools) {
           if (tool != "C++") {
-            const regex = new RegExp(tool, "i");
+            const regex = new RegExp(String.raw`${tool}[^a-zA-Z0-9]`, "i");
             regex.test(desc) ? tools[tool]++ : undefined;
           }
         }
@@ -97,7 +97,7 @@ module.exports = async (tools, what, city, state, numJobs) => {
       return await getJobDesc(jobids, url).then(async (res) => {
         return await getTools(res).then(async (res) => {
           await browser.close();
-          return res;
+          return { data: res, jobIds: jobids };
         });
       });
     });

@@ -47,9 +47,6 @@ const options: ChartOptions<"bar"> = {
 
 const graph = (props: { data: { x?: String; y?: Number }[] }) => {
   const data: ChartData<"bar"> = { datasets: [{ data: props.data }] };
-
-  console.log(data);
-
   return (
     <div className="flex justify-center">
       <Bar options={options} data={data} />

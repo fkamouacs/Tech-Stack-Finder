@@ -191,7 +191,7 @@ const search = (props: {
       ...currTools.other,
     };
 
-    scrape(allTools, job, city, state, 2);
+    scrape(allTools, job, city, state, 30);
   };
 
   const removeNewTool = (tool: Object) => {
@@ -229,10 +229,11 @@ const search = (props: {
     };
     let arrayRes: Object[] = [];
     await axios.post("http://localhost:3000/scrape", payload).then((res) => {
-      for (const [key, value] of Object.entries(res.data)) {
+      for (const [key, value] of Object.entries(res.data.data)) {
         let curr = { x: key, y: value };
         arrayRes.push(curr);
       }
+      console.log(res);
     });
 
     let sortedRes: Object[] = arrayRes.sort((a: any, b: any) => {
