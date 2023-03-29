@@ -42,7 +42,7 @@ module.exports = async (tools, what, city, state, numJobs) => {
 
         // wait random time 1-6 sec
         await new Promise((r) =>
-          setTimeout(r, (Math.floor(Math.random() * 6) + 1) * 1000)
+          setTimeout(r, (Math.floor(Math.random() * 2) + 1) * 1000)
         );
 
         if (numJobs > 0) {
@@ -77,7 +77,7 @@ module.exports = async (tools, what, city, state, numJobs) => {
 
         // wait random time 1-6 sec
         await new Promise((r) =>
-          setTimeout(r, (Math.floor(Math.random() * 6) + 1) * 1000)
+          setTimeout(r, (Math.floor(Math.random() * 2) + 1) * 1000)
         );
       }
       return descriptions;

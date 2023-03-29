@@ -37,6 +37,7 @@ const search = (props: {
   const [addTool, setAddTool] = useState(false);
   const [newTool, setNewTool] = useState<Object[]>([]);
   const [error, setError] = useState("");
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     setToggledAll(
@@ -195,8 +196,10 @@ const search = (props: {
 
     // check if tools is empty
     if (Object.keys(allTools).length) {
-      await scrape(allTools, job, city, state, 20);
-      props.setQuery({ city: city, state: state });
+      setSearching(true);
+      await scrape(allTools, job, city, state, 2);
+      props.setQuery({ city: city.replaceAll("+", " "), state: state });
+      setSearching(false);
     } else {
       setError("No tools selected. Please select some tools and try again.");
     }
@@ -344,11 +347,45 @@ const search = (props: {
           <br></br>
         </div>
       )}
+
       <button
-        className="w-full my-4  text-off-black font-bold py-2 rounded-sm border border-off-black hover:bg-off-black hover:text-off-white"
+        className={
+          searching
+            ? "w-full my-4 flex justify-center text-off-black font-bold py-2 rounded-sm border border-off-black cursor-not-allowed"
+            : "w-full my-4 flex justify-center text-off-black font-bold py-2 rounded-sm border border-off-black hover:bg-off-black hover:text-off-white"
+        }
         onClick={handleSubmit}
+        disabled={searching ? true : false}
       >
-        Search
+        {searching ? (
+          <div className="flex justify-content center align-center">
+            <div className="flex align-center mr-2 h-6 w-6">
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  className="opacity-100"
+                  fill="#9AD0F5"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            </div>
+            Please wait...
+          </div>
+        ) : (
+          <div className="">Search</div>
+        )}
       </button>
     </div>
   );
