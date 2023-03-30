@@ -7,4 +7,5 @@ Discover the top in-demand technologies for jobs in your area with our web app t
 * Typescript
 * React
 * Tailwindcss
-
+* Express.js
+* Node.js
