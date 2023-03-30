@@ -25,7 +25,7 @@ const search = (props: {
   const [toggledFrontend, setToggledFrontend] = useState("");
   const [toggledBackend, setToggledBackend] = useState("");
   const [toggledTool, setToggledTool] = useState("");
-  const [currTools, setCurrTools] = useState<ToolType>({});
+  const [currTools, setCurrTools] = useState<ToolType>({ other: {} });
   const [what, setWhat] = useState("");
   const [where, setWhere] = useState("");
   const [toggledTools, setToggledTools] = useState({
@@ -197,7 +197,7 @@ const search = (props: {
     // check if tools is empty
     if (Object.keys(allTools).length) {
       setSearching(true);
-      await scrape(allTools, job, city, state, 2);
+      await scrape(allTools, job, city, state, 30);
       props.setQuery({ city: city.replaceAll("+", " "), state: state });
       setSearching(false);
     } else {

@@ -4,13 +4,16 @@ const Stealth = require("puppeteer-extra-plugin-stealth");
 module.exports = async (tools, what, city, state, numJobs) => {
   puppeteer.use(Stealth());
 
-  return await puppeteer.launch({ headless: false }).then(async (browser) => {
+  return await puppeteer.launch({ headless: true }).then(async (browser) => {
     const page = (await browser.pages())[0];
 
     // store in json file
 
     const getJobIds = async (what, city, state, numJobs) => {
       let baseurl = `https://www.indeed.com/jobs?q=${what}&l=${city}%2C+${state}&radius=50`;
+      let ua =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36";
+      page.setUserAgent(ua);
       await page.goto(baseurl);
 
       // check if search query is valid
@@ -40,7 +43,7 @@ module.exports = async (tools, what, city, state, numJobs) => {
         numJobs -= ids.length;
         jobIds = jobIds.concat(ids);
 
-        // wait random time 1-6 sec
+        // wait random time 1-2 sec
         await new Promise((r) =>
           setTimeout(r, (Math.floor(Math.random() * 2) + 1) * 1000)
         );

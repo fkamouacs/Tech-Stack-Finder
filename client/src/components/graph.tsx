@@ -29,7 +29,7 @@ const graph = (props: {
   data: { x?: String; y?: Number }[];
   query: { city: String; state: String };
 }) => {
-  const data: ChartData<"bar"> = {
+  const data = {
     datasets: [{ label: "count", data: props.data }],
   };
 

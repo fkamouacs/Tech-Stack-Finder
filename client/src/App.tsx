@@ -1,7 +1,4 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-
-import Navbar from "./components/navbar";
+import { useState } from "react";
 import Search from "./components/search";
 import Graph from "./components/graph";
 
@@ -20,7 +17,6 @@ function App() {
   const [query, setQuery] = useState<Query>({ city: "", state: "" });
   return (
     <>
-      <Navbar />
       <div className="App text-off-black max-w-3xl w-full flex flex-col justify-center h-full ">
         <div className="px-4 font-bold text-3xl">Tech Stack Finder 💻</div>
         <Search setData={setData} setQuery={setQuery} />
